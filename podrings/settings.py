@@ -19,6 +19,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'django_bootstrap5',
     'django_rq',
+    'corsheaders',
     'podrings.moderation',
     'podrings.creative',
     'podrings.community',
@@ -62,6 +63,7 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'podrings.middleware.is_ajax_middleware'
 )
 
@@ -105,6 +107,20 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'  # NOQA
     }
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = (
+    'accept-encoding',
+    'accept',
+    'authorization',
+    'cache-control',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken'
+)
 
 AUTHENTICATION_BACKENDS = ('podrings.auth.EmailBackend',)
 LOGIN_URL = '/login/'
