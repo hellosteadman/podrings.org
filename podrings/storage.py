@@ -24,7 +24,7 @@ class Boto3Storage(S3Boto3Storage):
         return {
             **super().get_default_settings(),
             'querystring_auth': True,
-            'default_acl': 'private'
+            'default_acl': 'public-read'
         }
 
 
