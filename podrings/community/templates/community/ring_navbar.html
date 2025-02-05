@@ -51,12 +51,14 @@
                 </li>
             {% endif %}
 
-            <li class="nav-item">
-                <a href="{% url 'share_ring' object.slug %}" class="nav-link" data-bs-toggle="modal" data-bs-target="#share">
-                    <i class="bi bi-share"></i>
-                    <span class="d-none d-md-inline">{% trans 'Share podring' %}</span>
-                </a>
-            </li>
+            {% if object.slug %}
+                <li class="nav-item">
+                    <a href="{% url 'share_ring' object.slug %}" class="nav-link" data-bs-toggle="modal" data-bs-target="#share">
+                        <i class="bi bi-share"></i>
+                        <span class="d-none d-md-inline">{% trans 'Share podring' %}</span>
+                    </a>
+                </li>
+            {% endif %}
 
             {% if can_delete %}
                 <li class="nav-item">
