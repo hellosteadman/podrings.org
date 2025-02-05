@@ -147,7 +147,7 @@
         <div class="col-md-8 mx-auto">
             <h2 class="display-3 fw-bold mb-3 text-center" data-aos="fade-up">{% trans 'Here are some examples' %}</h2>
 
-            <div class="row mb-5">
+            <div class="row mb-5 justify-content-center">
                 {% for object in promo_list %}
                     <div class="col-md-4" data-aos="fade-up">
                         {% include 'creative/promo_card.html' with can_add_commitments=False show_podcast=True stacked=True %}
