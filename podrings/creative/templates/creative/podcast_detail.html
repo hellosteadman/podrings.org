@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load i18n thumbnail %}
+
+{% block header %}
+    {% if can_edit %}
+        {% include 'creative/podcast_navbar.html' with active_tab='podcast_detail' %}
+    {% endif %}
+
+    {% include 'creative/podcast_hero.html' %}
+{% endblock header %}
+
+{% block main %}
+    <div class="my-5">
+        {% include 'creative/podcast_promos.html' %}
+        {% include 'creative/podcast_episodes.html' %}
+    </div>
+{% endblock main %}
+
+{% block footer %}
+    {% if request.user.is_anonymous or not request.user.adminships.exists %}
+        <div class="alert alert-info py-5 mb-n5 position-relative z-1">
+            <div class="container mb-3">
+                <div class="row justify-content-center text-center">
+                    <div class="col-md-8 col-lg-6">
+                        <h2 class="display-3 fw-bold">{% trans 'Want to start your own podring?' %}</h2>
+                        <p class="lead fw-normal mb-4">
+                            {% trans 'Podrings are loose collections of podcasts with similar audiences.' %}
+                            {% trans 'They could be about the same subject matter, be made in the same place, or have a similar style.' %}
+                        </p>
+
+                        <h3 class="h4 mb-3">{% trans 'It couldn&rsquo;t be simpler' %}</h3>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-white rounded p-3">
+                                    <h3 class="display-3">1.</h3>
+                                    <p class="mb-0">{% trans 'Members upload trailers for their shows.' %}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-white rounded p-3">
+                                    <h3 class="display-3">2.</h3>
+                                    <p class="mb-0">{% trans 'And play other trailers at the end of their episodes.' %}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-white rounded p-3">
+                                    <h3 class="display-3">3</h3>
+                                    <p class="mb-0">{% trans 'Listeners discover new shows they&rsquo;ll love.' %}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if request.user.is_anonymous %}
+                            <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_ring' %}?layout=onboarding{% endfilter %}" class="btn btn-outline-primary btn-lg">
+                                <i class="bi bi-plus"></i>
+                                {% trans 'Create a podring for free' %}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'create_ring' %}?layout=onboarding" class="btn btn-outline-primary btn-lg">
+                                <i class="bi bi-plus"></i>
+                                {% trans 'Create a podring for free' %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock footer %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% include 'creative/podcast_modals.html' %}
+{% endblock javascript %}

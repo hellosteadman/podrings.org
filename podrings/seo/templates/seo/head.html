@@ -1,0 +1,8 @@
+{% load seo %}{% if seo_title %}<title>{{ seo_title|titlecase }}</title>
+{% endif %}{% if seo_description %}<meta name="description" content="{{ seo_description }}">
+{% endif %}{% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">
+{% endif %}{% if robots_content %}<meta name="robots" content="{{ robots_content }}">
+{% endif %}{% for tag in og_tags %}{% if tag.content %}<meta property="og:{{ tag.property }}" content="{{ tag.content }}">{% endif %}
+{% endfor %}{% for tag in article_tags %}{% if tag.content %}<meta property="article:{{ tag.property }}" content="{{ tag.content }}">{% endif %}
+{% endfor %}{% for tag in twitter_tags %}{% if tag.content %}<meta name="twitter:{{ tag.name }}" content="{{ tag.content }}">{% endif %}
+{% endfor %}{% if json_ld %}<script type="application/ld+json">{{ json_ld }}</script>{% endif %}

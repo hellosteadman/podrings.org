@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block modal_header %}
+    <div class="modal-header">
+        <h5 class="modal-title">{% trans 'Promo scheduled to run' %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+{% endblock modal_header %}
+
+{% block main %}
+    {% if not request.is_modal %}
+        <h1 class="display-4 fw-bold mb-3">{% trans 'Promo scheduled to run' %}</h1>
+
+    <div class="row">
+        <div class="col-md-8">{% endif %}
+            <ol class="display-5 fw-normal">
+                <li class="mb-3">
+                    <p class="mb-1">Download the promo audio file</p>
+                    <a href="{{ object.promo.audio.url }}" class="btn btn-secondary" download="{{ object.promo.filename }}">
+                        <i class="bi bi-download"></i>
+                        Download
+                    </a>
+                </li>
+
+                <li class="mb-3">
+                    <div class="multiformat-select">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <p class="mb-0">Include this text in your show notes</p>
+                            <div class="d-flex">
+                                <button class="btn btn-secondary btn-sm" type="button" data-pr-action="copy">
+                                    <i class="bi bi-clipboard-check"></i>
+                                    Copy to clipboard
+                                </button>
+
+                                <div class="dropdown ms-2">
+                                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="multiformat-active-option">Rich text</span>
+                                    </button>
+
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a href="javascript:;" data-pr-select="rich" class="dropdown-item active">Rich text</a></li>
+                                        <li><a href="javascript:;" data-pr-select="html" class="dropdown-item">HTML</a></li>
+                                        <li><a href="javascript:;" data-pr-select="plain" class="dropdown-item">Plain text</a></li>
+                                        <li><a href="javascript:;" data-pr-select="markdown" class="dropdown-item">Markdown</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-pr-format="rich" class="form-control">{{ shownotes_inclusion.html|safe }}</div>
+                        <textarea data-pr-format="html" rows="{{ shownotes_inclusion.html.splitlines|length }}" class="form-control d-none" style="text-wrap: nowrap;" readonly>{{ shownotes_inclusion.html }}</textarea>
+                        <textarea data-pr-format="markdown" rows="{{ shownotes_inclusion.markdown.splitlines|length }}" class="form-control d-none" style="text-wrap: nowrap;" readonly>{{ shownotes_inclusion.markdown }}</textarea>
+                        <textarea data-pr-format="plain" rows="{{ shownotes_inclusion.plain.splitlines|length }}" class="form-control d-none" style="text-wrap: nowrap;" readonly>{{ shownotes_inclusion.plain }}</textarea>
+                    </div>
+                </li>
+            </ol>
+        {% if not request.is_modal %}</div>
+    </div>{% endif %}
+{% endblock main %}

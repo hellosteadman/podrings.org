@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n django_bootstrap5 %}
+
+{% block header %}
+    {% if request.GET.layout != 'onboarding' %}
+        {% include 'community/ring_navbar.html' with active_tab='update_ring' %}
+    {% else %}
+        <section class="bg-light py-5 my-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-xl-7 mx-auto text-center">
+                        <p class="display-4 fw-normal mb-2">{% trans 'Welcome aboard' %}</p>
+                        <h1 class="display-2 fw-bold mb-3">{% trans 'Let&rsquo;s get your first podring setup' %}</h1>
+                        <p class="lead fw-normal mb-0">
+                            {% trans 'Tell us a little about the community you want to create.' %}<br class="d-none d-md-block">
+                            {% trans 'You&rsquo;ll be able to change any of this later on.' %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    {% if request.GET.layout != 'onboarding' %}
+        <h1 class="display-4 fw-bold mb-3">{% if object.pk %}{% trans 'Update podring' %}{% else %}{% trans 'Create a podring' %}{% endif %}</h1>
+    {% endif %}
+
+    <div class="row">
+        <div class="{% if request.GET.layout == 'onboarding' %}col-md-8 col-lg-6 mx-auto{% else %}col-md-8{% endif %}">
+            <form method="post" action="{{ request.path }}" enctype="multipart/form-data">
+                {% bootstrap_form form layout='floating' %}
+                <button type="submit" class="btn btn-primary btn-lg">{% if object.pk %}{% trans 'Update podring' %}{% else %}{% trans 'Create podring' %}{% endif %}</button>
+                {% if object.pk %}<a href="javascript:history.go(-1);" class="btn btn-secondary btn-lg">{% trans 'Go back' %}</a>{% endif %}
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+{% endblock main %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% include 'community/ring_modals.html' %}    
+{% endblock javascript %}

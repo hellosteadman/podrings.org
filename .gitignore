@@ -1,0 +1,12 @@
+*.pyc
+.DS_Store
+/.cache
+/.direnv
+/.docker
+/.dockerenv
+/.envrc
+/db.sqlite
+/htmlcov
+/media
+/node_modules
+__pycache__

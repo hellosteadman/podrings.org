@@ -1,0 +1,71 @@
+{% load i18n thumbnail %}
+
+{% if podcasts_to_add.exists %}
+    <div id="add" tabindex="-1" data-bs-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header">
+                    <h5 class="modal-title">{% trans 'Add podcast to ring' %}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans 'Choose one of your existing podcasts to add to this ring.' %}</p>
+                    <div class="row text-start mb-5">
+                        {% for podcast in podcasts_to_add %}
+                            <div class="col-md-4 mb-3">
+                                <a href="{% url 'join_ring' object.slug podcast.apple_id %}" class="d-block mb-2">
+                                    <img alt="{{ podcast.name }}" src="{% thumbnail podcast.artwork '608x608' crop=True %}" class="rounded img-fluid">
+                                </a>
+                                <p class="h6 text-center">
+                                    <a href="{% url 'join_ring' object.slug podcast.apple_id %}" class="text-dark text-decoration-none">{{ podcast.name }}</a>
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <a href="{% url 'create_podcast' %}?next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}" data-bs-toggle="modal" data-bs-target="#create" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-node-plus-fill"></i>
+                        {% trans 'Add a new podcast' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div id="create" tabindex="-1" data-bs-backdrop="static" class="modal fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="my-5 mx-auto spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.GET.view == 'request-sent' %}
+    <div data-bs-backdrop="static" class="modal fade show-on-load">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-body text-center py-5">
+                    <h1 class="display-4 fw-bold">{% trans 'Your request has been sent' %}</h1>
+                    <p class="lead fw-normal">
+                        {% trans 'The podring&rsquo;s admins have been emailed details about your podcast.' %}
+                        {% trans 'If they approve your membership, you&rsquo;ll receive an email from podrings.org with info on what to do next.' %}
+                    </p>
+                    <a href="{{ request.path }}" class="btn btn-outline-secondary btn-lg">{% trans 'OK' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div id="share" tabindex="-1" data-bs-backdrop="static" class="modal fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="my-5 mx-auto spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>

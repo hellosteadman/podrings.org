@@ -1,0 +1,31 @@
+{% load i18n thumbnail %}
+
+<div class="bg-light rounded shadow-lg mb-4">
+    <div class="row align-items-center">
+        <div class="d-none d-md-block col-md-4">
+            {% if object.podcast.artwork %}
+                <img alt="{% trans 'Podcast artwork' %}" src="{% thumbnail object.podcast.artwork '700x700' crop=True %}" class="img-fluid">
+            {% else %}
+                <svg viewBox="0 0 394 394" version="1.1" xmlns="http://www.w3.org/2000/svg" class="img-fluid">
+                    <rect id="Rectangle" fill="#F2ECEE" fill-rule="nonzero" x="-4.54747351e-13" y="0" width="394" height="394"></rect>
+                    <path d="M196.548779,200.036064 C225.267586,200.036064 248.266172,214.378746 248.266172,243.075676 C248.266172,271.772606 224.984979,295.036064 196.266172,295.036064 C167.547365,295.036064 144.266172,271.772606 144.266172,243.075676 C144.266172,214.378746 167.829972,200.036064 196.548779,200.036064 Z M196.35702,239.825483 C181.997617,239.825483 170.676427,253.791779 170.676427,268.035302 C170.676427,282.278826 182.317023,293.825483 196.676427,293.825483 C211.03583,293.825483 222.676427,282.278826 222.676427,268.035302 C222.676427,253.791779 210.716424,239.825483 196.35702,239.825483 Z M218.447577,98.4979332 C275.885191,98.4979332 300.865537,133.674693 300.865537,190.89372 C300.865537,244.721059 259.659571,288.960854 206.957407,294.016402 C244.662023,289.039727 273.757842,256.850922 273.757842,217.884036 C273.757842,175.46833 238.191119,146.684467 195.665193,146.684467 C153.139267,146.684467 119.757842,175.46833 119.757842,217.884036 C119.757842,256.631768 148.527306,288.677447 185.923051,293.930098 C133.628707,288.483893 92.8655372,244.431065 92.8655372,190.89372 C92.8655372,133.674693 161.009963,98.4979332 218.447577,98.4979332 Z" id="Shape" fill-opacity="0.0995410839" fill="#000000" fill-rule="nonzero" transform="translate(196.8655, 196.767) rotate(150) translate(-196.8655, -196.767)"></path>
+                </svg>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="p-3 ps-md-0">
+                <h3 class="h4">{{ object.title }}</h3>
+                {{ object.description|truncatewords:20|linebreaks }}
+                <div class="d-flex align-items-center justify-content-between" data-audiocontext="{{ object.enclosure }}">
+                    <a href="javascript:;" class="text-black text-decoration-none display-2" data-pr-action="playpause">
+                        <i class="bi-play-circle-fill"></i>
+                    </a>
+                    <div role="progressbar" aria-label="{% trans 'Playback progress' %}" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ object.duration }}" class="progress flex-grow-1 mx-3 my-0" style="height: .25rem;">
+                        <div class="progress-bar" style="transition: none;"></div>
+                    </div>
+                    <code class="text-muted">{{ object.get_duration_display }}</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

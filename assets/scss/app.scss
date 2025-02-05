@@ -1,0 +1,19 @@
+@import 'variables';
+@import '~bootstrap';
+@import 'type';
+@import '~@eonasdan/tempus-dominus/src/scss/tempus-dominus';
+@import '~aos/src/sass/aos';
+
+:root {
+    --#{$prefix}headings-font-weight: 500;
+    --#{$prefix}h1-font-size: #{$h1-font-size};
+    --#{$prefix}h2-font-size: #{$h2-font-size};
+    --#{$prefix}h3-font-size: #{$h3-font-size};
+    --#{$prefix}h4-font-size: #{$h4-font-size};
+    --#{$prefix}h5-font-size: #{$h5-font-size};
+    --#{$prefix}h6-font-size: #{$h6-font-size};
+}
+
+@import '~bootstrap-icons';
+@import 'itunes-search';
+@import 'upload';

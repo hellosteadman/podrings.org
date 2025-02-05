@@ -1,0 +1,137 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml" style="box-sizing: border-box;">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]--><!--[if !mso]>
+        <!--<![endif]-->
+        <style>{% spaceless %}
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            @media (max-width:660px) {
+                .img-responsive img.big {
+                    width: 100% !important;
+                }
+
+                .row-content {
+                    width: 100% !important;
+                }
+
+                .d-sm-none {
+                    display: none;
+                }
+
+                .stack .column {
+                    width: 100%;
+                    display: block;
+                }
+
+                .d-sm-none {
+                    min-height: 0;
+                    max-height: 0;
+                    max-width: 0;
+                    overflow: hidden;
+                    font-size: 0px;
+                }
+
+                .d-md-none {
+                    display: table !important;
+                    max-height: none !important;
+                }
+
+                .d-md-none table {
+                    display: table !important;
+                    max-height: none !important;
+                }
+            }
+        {% endspaceless %}</style>
+    </head>
+    <body style="-webkit-text-size-adjust: none; text-size-adjust: none; box-sizing: border-box; margin: 0; padding: 0;" bgcolor="#ffffff">
+        <span style="display:none; visibility:hidden; opacity:0; height:0; width:0;">{{ preheader|default:'A notification from Podrings' }}</span>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 640px; box-sizing: border-box;" width="640" bgcolor="#ffffff">
+            <tr style="box-sizing: border-box;">
+                <td style="padding: 10px 30px; width: 100%; box-sizing: border-box;">
+                    <div align="left" style="line-height: 10px; box-sizing: border-box;">
+                        <a href="https://podrings.org/" style="outline: none; box-sizing: border-box;" tabindex="-1" target="_blank">
+                            <img alt="Podrings" src="{% static 'img/email-logo.png' %}" style="display: block; height: 59px; max-width: 100%; box-sizing: border-box; border-width: 0;" title="Podrings" height="59">
+                        </a>
+                    </div>
+                </td>
+            </tr>
+
+            {% block header %}
+                <tr style="box-sizing: border-box;">
+                    <td class="column" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; padding-top: 0px; padding-bottom: 0px; box-sizing: border-box; border-width: 0px;" width="100%" align="left" valign="top">
+                        {% if image_url %}{% include 'mail/header_image.html' %}{% endif %}
+                    </td>
+                </tr>
+            {% endblock header %}
+
+            <tr style="box-sizing: border-box;">
+                <td style="box-sizing: border-box; padding: 3px 30px 15px;">
+                    <div style="font-size: 16px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 24px; box-sizing: border-box; line-height: 1.5; margin: 0;">
+                        {% block body %}{% endblock %}
+                    </div>
+                </td>
+            </tr>
+
+            {% if primary_url %}
+                <tr style="box-sizing: border-box;">
+                    <td style="box-sizing: border-box; padding: 3px 30px 15px;">
+                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ primary_url }}" style="height:52px;width:149px;v-text-anchor:middle;" arcsize="6%" stroke="false" fillcolor="#CF3C75"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><div style="color:#ffffff; font-family:Arial, sans-serif; font-size:16px"><![endif]-->
+                            <a href="{{ primary_url }}" style="text-decoration: none; display: inline-block; color: #ffffff; background-color: #CF3C75; border-radius: 3px; width: auto; font-weight: 400; padding-top: 10px; padding-bottom: 10px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; text-align: center; mso-border-alt: none; word-break: keep-all; box-sizing: border-box; border: 0px solid transparent;" target="_blank">
+                                <span style="padding-left: 28px; padding-right: 28px; font-size: 16px; display: inline-block; letter-spacing: normal; box-sizing: border-box;">
+                                    <span dir="ltr" style="word-break: break-word; line-height: 32px; box-sizing: border-box; margin: 0;">{{ primary_cta }}</span>
+                                </span>
+                            </a>
+                        <!--[if mso]></div></v:textbox></v:roundrect><![endif]-->
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% if footer_links|length %}
+                <tr style="box-sizing: border-box;">
+                    <td style="box-sizing: border-box; padding: 20px 10px 5px;">
+                        <div style="font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 14px; color: #969fa5; line-height: 1.2; box-sizing: border-box;">
+                            <p style="mso-line-height-alt: 14px; box-sizing: border-box; line-height: inherit; margin: 0;" align="center">
+                                <span style="color: #969fa5; box-sizing: border-box;">
+                                    {% for link in footer_links %}
+                                        <a href="{{ link.url }}" rel="noopener" style="text-decoration: underline; color: #969fa5; box-sizing: border-box;" target="_blank">{{ link.title }}</a>{% if not forloop.last %} |{% endif %}
+                                    {% endfor %}
+                                </span>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr style="box-sizing: border-box;">
+                <td style="box-sizing: border-box; padding: 20px 10px 5px;">
+                    <div style="font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 14px; color: #969fa5; line-height: 1.2; box-sizing: border-box;">
+                        <p style="mso-line-height-alt: 14px; box-sizing: border-box; line-height: inherit; margin: 0;" align="center">
+                            &copy; {% now 'Y' %} Hello Steadman Ltd |
+                            33 Ludgate Hill, Birmingham, B3 1HE, United Kingdom
+                        </p>
+                    </div>
+                </td>
+            </tr>
+
+            {% if preferences_url %}
+                <tr style="box-sizing: border-box;">
+                    <td style="box-sizing: border-box; padding: 20px 10px;">
+                        <div style="font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 14px; color: #969fa5; line-height: 1.2; box-sizing: border-box;">
+                            <p style="mso-line-height-alt: 14px; box-sizing: border-box; line-height: inherit; margin: 0;" align="center">
+                                <span style="color: #969fa5; box-sizing: border-box;">{% spaceless %}
+                                    <a href="{{ preferences_url }}" rel="noopener" style="text-decoration: underline; color: #969fa5; box-sizing: border-box;" target="_blank">Manage email notifications</a>
+                                {% endspaceless %}</span>
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+    </body>
+</html>

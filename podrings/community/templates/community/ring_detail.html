@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load i18n thumbnail %}
+
+{% block header %}
+    {% if can_edit %}
+        {% include 'community/ring_navbar.html' with active_tab='ring_detail' %}
+    {% endif %}
+
+    <div class="text-bg-dark">
+        <div class="container mb-3">
+            <div class="my-5 text-center{% if object.header %} mb-n5{% endif %}">
+                <h1 class="display-4 fw-bold">{{ object.name }}</h1>
+                <div class="col-lg-6 mx-auto">
+                    <div class="lead mb-4 fw-normal">{{ object.description|linebreaks }}</div>
+
+                    {% if object.moderation_tags.exists or not object.approved_on %}
+                        <div class="mb-4">
+                            {% for tag in object.moderation_tags.all %}
+                                <span class="badge text-bg-dark shadow">
+                                    <i class="bi bi-flag"></i>
+                                    {{ tag.name }}
+                                </span>
+                            {% endfor %}
+
+                            <span class="badge text-warning shadow">
+                                <i class="bi bi-stopwatch"></i>
+                                {% trans 'Awaiting approval' %}
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid align-items-center gap-2 d-sm-flex justify-content-sm-center mb-5">
+                        {% if not is_member %}
+                            {% if podcasts_to_add.exists %}
+                                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#add" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-person-plus"></i>
+                                    {% trans 'Join this podring' %}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_podcast' %}?layout=onboarding&next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}{% endfilter %}"{% if request.user.is_authenticated %} data-bs-toggle="modal" data-bs-target="#create"{% endif %} class="btn btn-primary btn-lg">
+                                    <i class="bi bi-person-plus"></i>
+                                    {% trans 'Join this podring' %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if object.header %}
+                    <img alt="{% trans 'Podring header image' %}" src="{% thumbnail object.header '700x700' %}" loading="lazy" class="img-fluid rounded-3 shadow-lg">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock header %}
+
+{% block main %}
+    <div class="my-5 text-center">
+        {% if podcasts|length %}
+            {% if podcasts|length != 1 %}
+                <h2 class="display-4 fw-bold mb-3">{% blocktrans with count=podcasts|length %}{{ count }} members{% endblocktrans %}</h2>
+            {% else %}
+                <h2 class="display-4 fw-bold mb-3">{% trans '1 member' %}</h2>
+            {% endif %}
+
+            <div class="row text-start justify-content-center mb-5">
+                {% for podcast in podcasts %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <a href="{{ podcast.get_absolute_url }}">
+                                {% if podcast.artwork %}
+                                    <img alt="{{ podcast.name }}" src="{% thumbnail podcast.artwork '608x608' crop=True %}" class="card-img-top">
+                                {% else %}
+                                    <svg viewBox="0 0 394 394" version="1.1" xmlns="http://www.w3.org/2000/svg" class="card-img-top">
+                                        <rect id="Rectangle" fill="#F2ECEE" fill-rule="nonzero" x="-4.54747351e-13" y="0" width="394" height="394"></rect>
+                                        <path d="M196.548779,200.036064 C225.267586,200.036064 248.266172,214.378746 248.266172,243.075676 C248.266172,271.772606 224.984979,295.036064 196.266172,295.036064 C167.547365,295.036064 144.266172,271.772606 144.266172,243.075676 C144.266172,214.378746 167.829972,200.036064 196.548779,200.036064 Z M196.35702,239.825483 C181.997617,239.825483 170.676427,253.791779 170.676427,268.035302 C170.676427,282.278826 182.317023,293.825483 196.676427,293.825483 C211.03583,293.825483 222.676427,282.278826 222.676427,268.035302 C222.676427,253.791779 210.716424,239.825483 196.35702,239.825483 Z M218.447577,98.4979332 C275.885191,98.4979332 300.865537,133.674693 300.865537,190.89372 C300.865537,244.721059 259.659571,288.960854 206.957407,294.016402 C244.662023,289.039727 273.757842,256.850922 273.757842,217.884036 C273.757842,175.46833 238.191119,146.684467 195.665193,146.684467 C153.139267,146.684467 119.757842,175.46833 119.757842,217.884036 C119.757842,256.631768 148.527306,288.677447 185.923051,293.930098 C133.628707,288.483893 92.8655372,244.431065 92.8655372,190.89372 C92.8655372,133.674693 161.009963,98.4979332 218.447577,98.4979332 Z" id="Shape" fill-opacity="0.0995410839" fill="#000000" fill-rule="nonzero" transform="translate(196.8655, 196.767) rotate(150) translate(-196.8655, -196.767)"></path>
+                                    </svg>
+                                {% endif %}
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ podcast.get_absolute_url }}" class="text-dark text-decoration-none">{{ podcast.name }}</a>
+                                </h5>
+
+                                <p class="card-text">{{ podcast.description|truncatewords:25 }}</p>
+                                <a href="https://episodes.fm/{{ podcast.apple_id }}" target="_blank" rel="nofollow" class="btn btn-secondary rounded-pill btn-sm">{% trans 'Listen' %}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif not object.approved_on %}
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8 col-lg-6">
+                    <div class="alert alert-warning">
+                        <strong>{% trans 'This podring is currently awaiting approval.' %}</strong>
+                        {% trans 'Once approved, other people will be able to apply to join.' %}
+                        {% trans 'Approval shouldn&rsquo;t take more than 48 hours.' %}
+                        {% trans 'In the meantime, you can add your own podcasts.' %}
+                    </div>
+
+                    {% if podcasts_to_add.exists %}
+                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#add" class="btn btn-outline-success btn-lg">
+                            <i class="bi bi-node-plus-fill"></i>
+                            {% trans 'Add more podcasts' %}
+                        </a>
+                    {% elif request.user.is_authenticated %}
+                        <a href="{% url 'create_podcast' %}?layout=onboarding&next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}" data-bs-toggle="modal" data-bs-target="#create" class="btn btn-outline-success btn-lg">
+                            <i class="bi bi-node-plus-fill"></i>
+                            {% trans 'Add your first podcast' %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_podcast' %}?layout=onboarding&next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}{% endfilter %}" data-bs-toggle="modal" data-bs-target="#create" class="btn btn-outline-success btn-lg">
+                            <i class="bi bi-node-plus-fill"></i>
+                            {% trans 'Add your first podcast' %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% elif can_approve %}
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8">
+                    <div class="bg-light p-4">
+                        <h2 class="display-4 fw-bold">{% trans 'A podring needs podcasts!' %}</h2>
+                        <p class="lead fw-normal">{% trans 'Start populating your podring with your own shows, then invite others to join so you can all promote each-other&rsquo;s work.' %}</p>
+
+                        {% if podcasts_to_add.exists %}
+                            <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#add" class="btn btn-outline-success btn-lg">
+                                <i class="bi bi-node-plus-fill"></i>
+                                {% trans 'Add your podcasts' %}
+                            </a>
+                        {% elif request.user.is_authenticated %}
+                            <a href="{% url 'create_podcast' %}?layout=onboarding&next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}" data-bs-toggle="modal" data-bs-target="#create" class="btn btn-outline-success btn-lg">
+                                <i class="bi bi-node-plus-fill"></i>
+                                {% trans 'Add your first podcast' %}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_podcast' %}?layout=onboarding&next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}{% endfilter %}" data-bs-toggle="modal" data-bs-target="#create" class="btn btn-outline-success btn-lg">
+                                <i class="bi bi-node-plus-fill"></i>
+                                {% trans 'Add your first podcast' %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not is_member %}
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8 col-lg-6">
+                    <h2 class="display-4 fw-bold">{% trans 'Podrings exist to help likeminded shows grow' %}</h2>
+                    <p class="lead fw-normal">{% trans 'Add your show to this podring, upload your trailer, and other members will feature it on their shows, in exchange for you doing the same.' %}</p>
+
+                    {% if podcasts_to_add.exists %}
+                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#add" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-plus"></i>
+                            {% trans 'Apply to join' %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_podcast' %}?layout=onboarding&next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}{% endfilter %}"{% if request.user.is_authenticated %} data-bs-toggle="modal" data-bs-target="#create"{% endif %} class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-plus"></i>
+                            {% trans 'Apply to join' %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock main %}
+
+{% block footer %}
+    {% if request.user.is_anonymous or not request.user.adminships.exists %}
+        <div class="alert alert-info py-5">
+            <div class="container">
+                <div class="row justify-content-center text-center">
+                    <div class="col-md-8 col-lg-6">
+                        <h2 class="display-3 fw-bold">{% trans 'Want to start your own podring?' %}</h2>
+                        <p class="lead fw-normal mb-4">
+                            {% trans 'Podrings are loose collections of podcasts with similar audiences.' %}
+                            {% trans 'They could be about the same subject matter, be made in the same place, or have a similar style.' %}
+                        </p>
+
+                        <h3 class="h4 mb-3">{% trans 'It couldn&rsquo;t be simpler' %}</h3>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-white rounded p-3">
+                                    <h3 class="display-3">1.</h3>
+                                    <p class="mb-0">{% trans 'Members upload trailers for their shows.' %}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-white rounded p-3">
+                                    <h3 class="display-3">2.</h3>
+                                    <p class="mb-0">{% trans 'And play other trailers at the end of their episodes.' %}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="bg-white rounded p-3">
+                                    <h3 class="display-3">3</h3>
+                                    <p class="mb-0">{% trans 'Listeners discover new shows they&rsquo;ll love.' %}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_ring' %}{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-plus"></i>
+                            {% trans 'Create a podring for free' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock footer %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% include 'community/ring_modals.html' %}    
+{% endblock javascript %}

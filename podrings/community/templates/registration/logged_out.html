@@ -1,0 +1,8 @@
+{% extends 'logged_out.html' %}
+{% load i18n %}
+
+{% block form %}
+    <h1 class="display-4 fw-bold text-center">{% trans 'Logged out' %}</h1>
+    <p class="lead fw-normal text-center">{% trans 'You can close this tab or log back into Podrings if you didn&rsquo;t mean to logout.' %}</p>
+    <p class="text-center"><a href="{% url 'login' %}" class="btn btn-outline-primary">{% trans 'Log back in' %}</a></p>
+{% endblock form %}

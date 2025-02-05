@@ -1,0 +1,3 @@
+<p>If you like this podcast, you'll also enjoy<br /><a href="{{ object.get_tracking_url }}">{{ object.promo.podcast.name }}</a></p>
+{% for ring in rings %}<p>This podcast is part of the <a href="https://podrings.org{{ ring.get_absolute_url }}">{{ ring.name }}</a> podring.</p>
+{% endfor %}

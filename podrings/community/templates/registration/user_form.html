@@ -1,0 +1,33 @@
+{% extends 'logged_out.html' %}
+{% load i18n django_bootstrap5 %}
+
+{% block form %}
+    <h1 class="display-4 fw-bold text-center">{% trans 'Create a free Podrings account' %}</h1>
+    <p class="lead fw-normal text-center mb-3">
+        {% trans 'Already have an account?' %}
+        <a href="{% url 'login' %}?next={{ next|default:''|urlencode }}">{% trans 'Login' %}</a>
+    </p>
+
+    <form method="post" action="{{ request.path }}">
+        <div class="d-flex justify-content-between mb-3">
+            {% bootstrap_field form.first_name layout='floating' wrapper_class='me-2 flex-grow-1' %}
+            {% bootstrap_field form.last_name layout='floating' wrapper_class='flex-grow-1' %}
+        </div>
+
+        {% bootstrap_field form.email layout='floating' %}
+        {% bootstrap_field form.password1 layout='floating' %}
+        {% bootstrap_field form.password2 layout='floating' %}
+
+        <div class="d-flex align-items-center justify-content-between">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-person-add"></i>
+                {% trans 'Create account' %}
+            </button>
+
+            <a href="/terms/" class="text-dark">{% trans 'Terms &amp; conditions' %}</a>
+        </div>
+
+        <input name="next" type="hidden" value="{{ next|default:'' }}">
+        {% csrf_token %}
+    </form>
+{% endblock form %}

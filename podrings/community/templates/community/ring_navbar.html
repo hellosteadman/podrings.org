@@ -1,0 +1,71 @@
+{% load i18n %}
+
+<div class="bg-light pt-2">
+    <div class="container d-flex justify-content-between">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="{{ object.get_absolute_url }}" class="nav-link{% if active_tab == 'ring_detail' %} active{% endif %}">
+                    <i class="bi bi-eye"></i>
+                    <span class="d-none d-md-inline">{% trans 'View podring' %}</span>
+                </a>
+            </li>
+
+            {% if can_edit %}
+                <li class="nav-item">
+                    <a href="{% url 'update_ring' object.slug %}" class="nav-link{% if active_tab == 'update_ring' %} active{% endif %}">
+                        <i class="bi bi-pencil"></i>
+                        <span class="d-none d-md-inline">{% trans 'Update details' %}</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if can_approve %}
+                <li class="nav-item">
+                    {% if podcasts_to_add.exists %}
+                        <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#add" class="nav-link">
+                            <i class="bi bi-node-plus-fill"></i>
+                            <span class="d-none d-md-inline">{% trans 'Add a podcast' %}</span>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'create_podcast' %}?next={% filter urlencode %}/@{{ object.slug }}/add/:apple_id/{% if not request.user.podcasts.exists %}?layout=onboarding{% endif %}{% endfilter %}" data-bs-toggle="modal" data-bs-target="#create" class="nav-link">
+                            <i class="bi bi-node-plus-fill"></i>
+                            <span class="d-none d-md-inline">{% trans 'Add a podcast' %}</span>
+                        </a>
+                    {% endif %}
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'join_requests' object.slug %}" class="nav-link{% if active_tab == 'join_requests' %} active{% endif %}">
+                        <span class="badge bg-{% if pending_requests.exists %}primary{% else %}secondary{% endif %}">{{ pending_requests.count|default:object.joining_requests.count }}</span>
+                        <span class="d-none d-md-inline">{% trans 'Members' %}</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if can_transfer %}
+                <li class="nav-item">
+                    <a href="" class="nav-link{% if active_tab == 'leave_ring' %} active{% endif %}">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span class="d-none d-md-inline">{% trans 'Leave podring' %}</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="nav-item">
+                <a href="{% url 'share_ring' object.slug %}" class="nav-link" data-bs-toggle="modal" data-bs-target="#share">
+                    <i class="bi bi-share"></i>
+                    <span class="d-none d-md-inline">{% trans 'Share podring' %}</span>
+                </a>
+            </li>
+
+            {% if can_delete %}
+                <li class="nav-item">
+                    <a href="{% url 'delete_ring' object.slug %}" class="nav-link{% if active_tab == 'delete_ring' %} active{% endif %}">
+                        <i class="bi bi-trash"></i>
+                        <span class="d-none d-md-inline">{% trans 'Delete podring' %}</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>

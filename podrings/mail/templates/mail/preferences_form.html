@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+{% load i18n django_bootstrap5 %}
+{% block head_title %}{% trans 'Email notification preferences' %}{% endblock %}
+
+{% block body %}
+    <div class="container my-auto">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="p-3 p-md-5 pb-5 rounded-3 bg-white">
+                    <h1 class="mt-0 h2">{% trans 'Set your email preferences' %}</h1>
+                    <form method="post">
+                        {% bootstrap_form form %}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">{% trans 'Update preferences' %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

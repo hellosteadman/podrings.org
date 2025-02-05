@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load i18n static thumbnail %}
+
+{% block header %}
+    <section class="my-3 mb-md-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-xl-7 mx-auto text-center">
+                    <div data-aos="fade-up">
+                        <p class="display-4 fw-normal mb-2">{% trans 'Welcome to Podrings' %}</p>
+                        <h1 class="display-2 fw-bold mb-3">{% trans 'Podcast cross-promotion<br>the easy way' %}</h1>
+                        <p class="lead fw-normal">{% trans 'The best way to promote a podcast is by word-of-mouth. The next best way is Podrings, where <strong>likeminded podcasters band together</strong> to cross-promote shows based on a common theme.' %}</p>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-center mb-4" data-aos="fade-up">
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'create_ring' %}" class="btn btn-primary rounded-pill btn-lg me-md-2">{% trans 'Start a podring' %}</a>
+                        {% else %}
+                            <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_ring' %}?layout=onboarding{% endfilter %}" class="btn btn-primary rounded-pill btn-lg me-md-2">{% trans 'Start a podring' %}</a>
+                        {% endif %}
+
+                        <a href="{% url 'ring_list' %}" class="btn btn-outline-secondary rounded-pill btn-lg">{% trans 'Join a podring' %}</a>
+                    </div>
+                </div>
+
+                <div class="col-md-8 mx-auto">
+                    <img alt="{% trans 'Glowing squares and rectangles resembling podcast covers, connected by luminous lines and nodes, forming a vibrant web against a starry night sky with hues of blue, purple, and green' %}" src="{% static 'img/galaxy.jpg' %}" loading="lazy" class="d-block mx-lg-auto img-fluid rounded shadow-lg position-relative z-2 mb-md-n5">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-light position-relative py-5 z-1 mb-0">
+        <div class="container mt-md-5">
+            <div class="row">
+                <div class="col-md-8 col-xl-7 mx-auto text-center">
+                    <h2 class="display-2 fw-bold mb-3" data-aos="fade-up">{% trans 'Good podcasts are easy to find.<br>But great audio is going unnoticed.' %}</h2>
+                    <div class="lead fw-normal">
+                        <p data-aos="fade-up">
+                            {% trans 'Depending on who you ask, podcast discoverability is either a huge problem or a dreadful cliché.' %}
+                            {% trans 'Unlike YouTube or social media, podcasting doesn&rsquo;t have an algorithm.' %}
+                            {% trans 'But neither do books, TV shows, or cinemas.' %}
+                        </p>
+                    </div>
+
+                    <h3 class="display-3 fw-bold mt-4 mb-3" data-aos="fade-up">{% trans 'This is a solved problem.' %}</h3>
+                    <div class="lead fw-normal">
+                        <p data-aos="fade-up">
+                            {% trans 'When you watch a show on Apple TV+ or Amazon Prime – or when you go to the cinema – you see an ad for something else you&rsquo;re likely to enjoy.' %}
+                            {% trans 'Radio stations play <q>trails</q> for other programs on the station or within the network.' %}
+                        </p>
+                        <p class="fw-bold" data-aos="fade-up">{% trans 'Most podcasters work on their own and have to build audiences from scratch. So we need a way to get that network effect without the network.' %}</p>
+                        <p class="mb-4" data-aos="fade-up">{% trans 'That&rsquo;s why Podrings exists.' %}<br>{% trans 'Here&rsquo;s how it works.' %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="300">
+                    <h4 class="d-flex align-items-center justify-content-center">
+                        <span class="badge bg-secondary rounded-pill me-2">1</span>
+                        {% trans 'Find or join a podring' %}
+                    </h4>
+
+                    <p>
+                        {% trans 'A podring is a loose collection of podcasts bound together by a common theme.' %}
+                        {% trans 'That might be a niche topic, a production method, or a location.' %}
+                    </p>
+                    <p>{% trans 'Anyone can start a podring, and they get to decide which podcasts can join.' %}</p>
+                </div>
+                <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="600">
+                    <h4 class="d-flex align-items-center justify-content-center">
+                        <span class="badge bg-secondary rounded-pill me-2">2</span>
+                        {% trans 'Upload your promo' %}
+                    </h4>
+                    <p>
+                        {% trans 'Record a 30-60 second promo for your podcast, and add it to your podcast profile within Podrings.' %}
+                        {% trans '(You can use your trailer if it&rsquo;s under 2 minutes.)' %}
+                    </p>
+                    <p>{% trans 'Podring members download your promo and feature it in their upcoming episodes.' %}</p>
+                </div>
+                <div class="col-md-3 text-center" data-aos="fade-up" data-aos-delay="900">
+                    <h4 class="d-flex align-items-center justify-content-center">
+                        <span class="badge bg-secondary rounded-pill me-2">3</span>
+                        {% trans 'Promote other shows' %}
+                    </h4>
+                    <p>{% trans 'Your Podrings dashboard shows you the next promo to download and showcase in each of your podcasts.' %}</p>
+                    <p>{% trans 'You either edit the promo into your episode or use <abbr title="Dynamic ad insertion">DAI</abbr> to stitch the promo into your back catalogue.' %}</p>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-center mt-5" data-aos="fade-up" data-aos-delay="1200">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'create_ring' %}" class="btn btn-primary rounded-pill btn-lg me-md-2">{% trans 'Start a podring' %}</a>
+                {% else %}
+                    <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_ring' %}?layout=onboarding{% endfilter %}" class="btn btn-primary rounded-pill btn-lg me-md-2">{% trans 'Start a podring' %}</a>
+                {% endif %}
+
+                <a href="{% url 'ring_list' %}" class="btn btn-outline-secondary rounded-pill btn-lg">{% trans 'Join a podring' %}</a>
+            </div>
+        </div>
+    </section>
+
+    <svg width="100%" viewBox="0 0 100 4" version="1.1" xmlns="http://www.w3.org/2000/svg" class="d-block mb-5" style="margin-top: -4px">
+        <path d="M0,0.221798936 C7.1859538,2.25343477 16.1295881,3.26925267 26.830903,3.26925267 C42.8828752,3.26925267 62.2799214,0.20765 77.178498,0.20765 C87.1108823,0.20765 94.7180497,1.22818423 100,3.26925267 L100,3.61287259 L0,3.61287259 L0,0.221798936 Z" fill="var(--pr-light)" fill-rule="nonzero" transform="translate(50, 1.9103) scale(-1, -1) translate(-50, -1.9103)"></path>
+    </svg>
+{% endblock header %}
+
+{% block main %}
+    <h2 class="display-2 fw-bold mb-3 text-center" data-aos="fade-up">{% trans 'Latest podrings' %}</h2>
+
+    <div class="row justify-content-center">
+        {% for object in ring_list %}
+            <div class="col-md-3" data-aos="fade-up">
+                <a href="{{ object.get_absolute_url }}" class="text-dark text-decoration-none">
+                    {% if object.header %}
+                        <img alt="{% trans 'Podring header' %}" src="{% thumbnail object.header '700x394' crop=True %}" class="img-fluid rounded mb-3">
+                    {% else %}
+                        <svg viewBox="0 0 700 394" version="1.1" xmlns="http://www.w3.org/2000/svg" class="img-fluid rounded mb-3">
+                            <rect fill="#F2ECEE" x="-4.54747351e-13" y="0" width="700" height="394"></rect>
+                            <path d="M349.548709,200.036048 C378.267516,200.036048 401.266102,214.37873 401.266102,243.07566 C401.266102,271.77259 377.984909,295.036048 349.266102,295.036048 C320.547295,295.036048 297.266102,271.77259 297.266102,243.07566 C297.266102,214.37873 320.829902,200.036048 349.548709,200.036048 Z M349.35695,239.825467 C334.997547,239.825467 323.676357,253.791763 323.676357,268.035286 C323.676357,282.27881 335.316953,293.825467 349.676357,293.825467 C364.03576,293.825467 375.676357,282.27881 375.676357,268.035286 C375.676357,253.791763 363.716354,239.825467 349.35695,239.825467 Z M371.447507,98.4979174 C428.885121,98.4979174 453.865467,133.674677 453.865467,190.893704 C453.865467,244.721043 412.659501,288.960838 359.957337,294.016386 C397.661953,289.039711 426.757772,256.850906 426.757772,217.88402 C426.757772,175.468314 391.191049,146.684451 348.665123,146.684451 C306.139197,146.684451 272.757772,175.468314 272.757772,217.88402 C272.757772,256.631752 301.527236,288.677431 338.922981,293.930082 C286.628637,288.483877 245.865467,244.431049 245.865467,190.893704 C245.865467,133.674677 314.009893,98.4979174 371.447507,98.4979174 Z" fill-opacity="0.0995410839" fill="#000000" transform="translate(349.8655, 196.767) rotate(-210) translate(-349.8655, -196.767)"></path>
+                        </svg>
+                    {% endif %}
+
+                    <h2 class="h4">{{ object.name }}</h2>
+                    {{ object.description|truncatewords:50|linebreaks }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8 col-xl-7 mx-auto">
+            <h2 class="display-2 fw-bold mb-3 text-center" data-aos="fade-up">{% trans 'What is a podcast promo?' %}</h2>
+            <div class="lead fw-normal text-center">
+                <p data-aos="fade-up">
+                    {% trans 'A promo is a short trailer for your podcast.' %}
+                    {% trans 'Unlike a full trailer, it doesn&rsquo;t necessarily appear in your podcast feed, and it&rsquo;s usually shorter.' %}
+                </p>
+                <p data-aos="fade-up">
+                    {% trans 'If you already have a trailer in your feed and it&rsquo;s short enough, this could make a good promo.' %}
+                    {% trans 'The key thing to remember is that, unlike a trailer, a promo will be placed like an ad in another podcast, so it needs to grab attention and have a clear call-to-action os the listener knows what to do next.' %}
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-8 mx-auto">
+            <h2 class="display-3 fw-bold mb-3 text-center" data-aos="fade-up">{% trans 'Here are some examples' %}</h2>
+
+            <div class="row mb-5">
+                {% for object in promo_list %}
+                    <div class="col-md-4" data-aos="fade-up">
+                        {% include 'creative/promo_card.html' with can_add_commitments=False show_podcast=True stacked=True %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock main %}

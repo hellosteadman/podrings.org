@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block header %}
+    {% include 'community/ring_navbar.html' with active_tab='delete_ring' %}
+{% endblock %}
+
+{% block main %}
+    <div class="text-center py-md-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h1 class="display-4 fw-bold">{% trans 'Delete podring' %}</h1>
+                <p class="lead fw-normal mb-0">{% blocktrans with ring=object.name class='class="fw-bold"' %}Are you sure you want to delete the podring <q {{ class }}>{{ ring }}</q>?</p>{% endblocktrans %}
+                <p class="lead text-danger fw-bold">⚠️ {% trans 'This can&rsquo;t be ondone.' %}</p>
+                <form method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-lg">{% trans 'Yes, delete it' %}</button>
+                    {% csrf_token %}
+                </form>
+                <a href="javascript:history.go(-1)" class="btn btn-secondary btn-lg">{% trans 'No, keep it' %}</a>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% include 'community/ring_modals.html' %}    
+{% endblock javascript %}

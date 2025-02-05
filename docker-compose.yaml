@@ -1,0 +1,78 @@
+version: '2'
+
+services:
+    postgres:
+        image: postgres:latest
+        volumes:
+            - ./.docker/volumes/postgres/core:/var/lib/postgresql/data
+        networks:
+            application:
+        environment:
+            - POSTGRES_PASSWORD=postgres
+    redis:
+        image: redis:latest
+        volumes:
+            - ./.docker/volumes/redis:/data
+        networks:
+            application:
+    s3:
+        image: mrister/fake-s3
+        volumes:
+            - ./.docker/volumes/s3/:/fakes3_root/
+        ports:
+            - 4569:4569
+        networks:
+            application:
+            ingress:
+                aliases:
+                    - s3.localhost
+                    - podrings.s3.localhost
+    app:
+        restart: always
+        build:
+            context: .
+        networks:
+            application:
+            ingress:
+        depends_on:
+            - postgres
+            - s3
+            - redis
+        volumes:
+            - ./:/code
+        env_file:
+            - ./.dockerenv
+        command: >
+            bash -c "python wait_for_postgres.py &&
+                python manage.py migrate &&
+                python manage.py runserver 0.0.0.0:80"
+        ports:
+            - 80:80
+        networks:
+            application:
+            ingress:
+                aliases:
+                    - podrings.localhost
+    rq_default:
+        restart: always
+        build:
+            context: .
+        networks:
+            application:
+            ingress:
+        depends_on:
+            - postgres
+            - s3
+            - redis
+        volumes:
+            - ./:/code
+        env_file:
+            - ./.dockerenv
+        command: >
+            bash -c "python wait_for_postgres.py &&
+                python manage.py rqworker default"
+
+networks:
+    application:
+    ingress:
+        driver: bridge

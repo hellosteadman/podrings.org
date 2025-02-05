@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<div class="bg-light pt-2">
+    <div class="container d-flex justify-content-between">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="{{ object.get_absolute_url }}" class="nav-link{% if active_tab == 'podcast_detail' %} active{% endif %}">
+                    <i class="bi bi-eye"></i>
+                    <span class="d-none d-md-inline">{% trans 'View podcast' %}</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                {% if object.promos.exists %}
+                    <a href="{% url 'podcast_promos' object.apple_id %}" data-bs-toggle="modal" data-bs-target="#promos" class="nav-link{% if active_tab == 'podcast_promos' %} active{% endif %}">
+                        <i class="bi bi-star-fill"></i>
+                        <span class="d-none d-md-inline">{% trans 'Manage promos' %}</span>
+                    </a>
+                {% else %}
+                    <a href="{% url 'create_promo' object.apple_id %}" data-bs-toggle="modal" data-bs-target="#promos" class="nav-link{% if active_tab == 'podcast_promos' %} active{% endif %}">
+                        <i class="bi bi-star-fill"></i>
+                        <span class="d-none d-md-inline">{% trans 'Manage promos' %}</span>
+                    </a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>

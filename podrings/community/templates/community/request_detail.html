@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load i18n django_bootstrap5 %}
+
+{% block header %}
+    {% include 'community/ring_navbar.html' with object=object.ring active_tab='join_requests' %}
+
+    <div class="container">
+        <div class="btn-group py-2">
+            {% if not object.approved_on %}
+                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#accept" class="btn btn-outline-success">
+                    <i class="bi bi-node-plus-fill"></i>
+                    {% trans 'Add to podring' %}
+                </a>
+
+                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#reject" class="btn btn-outline-danger">
+                    <i class="bi bi-ban"></i>
+                    {% trans 'Reject request' %}
+                </a>
+            {% else %}
+                <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#remove" class="btn btn-outline-danger">
+                    <i class="bi bi-ban"></i>
+                    {% trans 'Remove podcast' %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'creative/podcast_hero.html' with object=object.podcast %}
+{% endblock %}
+
+{% block main %}
+    <div class="my-5">
+        {% include 'creative/podcast_promos.html' with object=object.podcast %}
+        {% include 'creative/podcast_episodes.html' with object=object.podcast %}
+    </div>
+{% endblock main %}
+
+{% block javascript %}
+    {{ block.super }}
+    {% include 'community/ring_modals.html' with object=object.ring %}
+    {% include 'creative/podcast_modals.html' with object=object.podcast %}
+
+    <div id="accept" data-bs-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">{% trans 'Accepet this request?' %}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="lead fw-normal">
+                        {% blocktrans with podcast=object.podcast.name ring=object.ring.name %}If you accept this request, <q>{{ podcast }}</q> will be added to the <q>{{ ring }}</q> podring.{% endblocktrans %}
+                        {% trans 'An email will be sent to the podcast creator to let them know the good news.' %}
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="{% url 'accept_join_request' object.ring.slug object.pk %}" class="btn btn-success btn-lg">{% trans 'Accept request' %}</a>
+                    <a href="javascript:;" data-bs-dismiss="modal" class="btn btn-secondary btn-lg">{% trans 'Cancel' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="reject" data-bs-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">{% trans 'Reject this request?' %}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="lead fw-normal">
+                        {% blocktrans with podcast=object.podcast.name ring=object.ring.name %}If you reject this request, <q>{{ podcast }}</q> will not be added to the <q>{{ ring }}</q> podring.{% endblocktrans %}
+                        {% trans 'No email will be sent to the podcast creator, but they will be able to request to join again.' %}
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="{% url 'delete_join_request' object.ring.slug object.pk %}" class="btn btn-danger btn-lg">{% trans 'Reject request' %}</a>
+                    <a href="javascript:;" data-bs-dismiss="modal" class="btn btn-secondary btn-lg">{% trans 'Cancel' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="remove" data-bs-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title">{% trans 'Remove this podcast?' %}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="lead fw-normal">
+                        {% trans 'If you choose to remove the podcast from this podring, the creator will be able to request addition to the podring at a later date.' %}
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="{% url 'delete_join_request' object.ring.slug object.pk %}" class="btn btn-danger btn-lg">{% trans 'Remove podcast' %}</a>
+                    <a href="javascript:;" data-bs-dismiss="modal" class="btn btn-secondary btn-lg">{% trans 'Cancel' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock javascript %}

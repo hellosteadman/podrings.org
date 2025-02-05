@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block main %}
+    <div class="d-flex flex-column text-center py-md-5">
+        <h1 class="display-4 fw-bold">{% trans 'Check your inbox' %}</h1>
+        <p class="lead fw-normal">{% trans 'A confirmation link has been sent to the address listed in your podcast feed.' %}</p>
+    </div>
+{% endblock main %}

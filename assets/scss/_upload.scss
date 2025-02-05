@@ -1,0 +1,23 @@
+[data-upload-field] {
+    user-select: none;
+    -webkit-user-select: none;
+
+    p {
+        pointer-events: none;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .card {
+        background: $light;
+        transition: all .3s ease;
+    }
+
+    &.active {
+        .card {
+            background: #D6E6D9;
+        }
+    }
+}

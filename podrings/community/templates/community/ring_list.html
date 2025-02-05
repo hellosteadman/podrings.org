@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load i18n thumbnail %}
+
+{% block header %}
+    <section class="my-3 mb-md-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-xl-7 mx-auto text-center">
+                    <div data-aos="fade-up">
+                        <p class="display-4 fw-normal mb-2">{% trans 'Find your people' %}</p>
+                        <h1 class="display-2 fw-bold mb-3">{% trans 'Introducing listeners to<br>new podcasts they&rsquo;ll love' %}</h1>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-center mb-4" data-aos="fade-up">
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'create_ring' %}" class="btn btn-primary rounded-pill btn-lg me-md-2">{% trans 'Start your own podring' %}</a>
+                        {% else %}
+                            <a href="{% url 'create_user' %}?next={% filter urlencode %}{% url 'create_ring' %}?layout=onboarding{% endfilter %}" class="btn btn-primary rounded-pill btn-lg me-md-2">{% trans 'Start your own podring' %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock header %}
+
+{% block main %}
+    <div class="row justify-content-center">
+        {% for object in object_list %}
+            <div class="col-md-4" data-aos="fade-up">
+                <a href="{{ object.get_absolute_url }}" class="text-dark text-decoration-none">
+                    {% if object.header %}
+                        <img alt="{% trans 'Podring header' %}" src="{% thumbnail object.header '700x394' crop=True %}" class="img-fluid rounded mb-3">
+                    {% else %}
+                        <svg viewBox="0 0 700 394" version="1.1" xmlns="http://www.w3.org/2000/svg" class="img-fluid rounded mb-3">
+                            <rect fill="#F2ECEE" x="-4.54747351e-13" y="0" width="700" height="394"></rect>
+                            <path d="M349.548709,200.036048 C378.267516,200.036048 401.266102,214.37873 401.266102,243.07566 C401.266102,271.77259 377.984909,295.036048 349.266102,295.036048 C320.547295,295.036048 297.266102,271.77259 297.266102,243.07566 C297.266102,214.37873 320.829902,200.036048 349.548709,200.036048 Z M349.35695,239.825467 C334.997547,239.825467 323.676357,253.791763 323.676357,268.035286 C323.676357,282.27881 335.316953,293.825467 349.676357,293.825467 C364.03576,293.825467 375.676357,282.27881 375.676357,268.035286 C375.676357,253.791763 363.716354,239.825467 349.35695,239.825467 Z M371.447507,98.4979174 C428.885121,98.4979174 453.865467,133.674677 453.865467,190.893704 C453.865467,244.721043 412.659501,288.960838 359.957337,294.016386 C397.661953,289.039711 426.757772,256.850906 426.757772,217.88402 C426.757772,175.468314 391.191049,146.684451 348.665123,146.684451 C306.139197,146.684451 272.757772,175.468314 272.757772,217.88402 C272.757772,256.631752 301.527236,288.677431 338.922981,293.930082 C286.628637,288.483877 245.865467,244.431049 245.865467,190.893704 C245.865467,133.674677 314.009893,98.4979174 371.447507,98.4979174 Z" fill-opacity="0.0995410839" fill="#000000" transform="translate(349.8655, 196.767) rotate(-210) translate(-349.8655, -196.767)"></path>
+                        </svg>
+                    {% endif %}
+
+                    <h2 class="h4">{{ object.name }}</h2>
+                    {{ object.description|truncatewords:50|linebreaks }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock main %}

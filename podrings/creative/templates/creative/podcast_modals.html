@@ -1,0 +1,33 @@
+{% load i18n %}
+
+<div id="promos" tabindex="-1" data-bs-backdrop="static"{% if request.GET.modal == 'promos' %} data-pr-preload="{% url 'create_promo' object.apple_id %}?layout=onboarding"{% endif %} class="modal fade{% if request.GET.modal == 'promos' %} show-on-load{% endif %}">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="my-5 mx-auto spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.user.is_authenticated and object.created_by == request.user %}
+    <div id="add-promo" tabindex="-1" data-bs-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="my-5 mx-auto spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<div id="share" tabindex="-1" data-bs-backdrop="static" class="modal fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="my-5 mx-auto spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>

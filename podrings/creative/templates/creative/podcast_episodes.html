@@ -1,0 +1,22 @@
+{% load i18n %}
+
+{% if trailer %}
+    <h2 class="h3 text-center mb-3">{% trans 'Trailer' %}</h2>
+    <div class="row mb-5">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            {% include 'creative/episode_card.html' with object=trailer %}
+        </div>
+    </div>
+{% endif %}
+
+{% if page_obj.object_list.exists %}
+    <h2 class="h3 text-center mb-3">{% trans 'Episodes' %}</h2>
+{% endif %}
+
+{% for episode in page_obj.object_list %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            {% include 'creative/episode_card.html' with object=episode %}
+        </div>
+    </div>
+{% endfor %}

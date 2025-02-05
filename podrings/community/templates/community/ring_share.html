@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block modal_header %}
+    <div class="modal-header">
+        <h5 class="modal-title">{% trans 'Share podring' %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+{% endblock modal_header %}
+
+{% block main %}
+    <div class="{% if not request.is_modal %}d-flex flex-column py-md-5{% endif %} text-center">
+        {% if not request.is_modal %}<h1 class="display-4 fw-bold">{% trans 'Share this podring' %}</h1>{% endif %}
+
+        <div class="d-flex justify-content-between mb-3">
+            <a href="{% url 'ring_qrcode' object.slug %}" download="{{ object.name }}.svg" class="mx-auto">
+                <img alt="{% trans 'Podring QR code' %}" src="{% url 'ring_qrcode' object.slug %}" width="128" class="rounedd shadow">
+            </a>
+        </div>
+
+        <div class="d-flex mb-3">
+            <input class="form-control form-control-lg" value="{{ object.get_sharing_url }}" readonly>
+            <button type="button" data-pr-action="copy" data-pr-text="{{ object.get_sharing_url }}" class="btn bg-light">
+                <i class="bi bi-clipboard-check"></i>
+            </button>
+        </div>
+
+        <div class="alert alert-info">
+            {% trans 'Copy the link above and share it in an email to any podcasters you&rsquo;d like to invite to your podring.' %}
+        </div>
+
+        <div>
+            <a href="https://twitter.com/intent/tweet?text={% filter urlencode %}Join the {{ object.name }} podring. {{ object.get_sharing_url }}{% endfilter urlencode %}" title="{% trans 'Share to Twitter' %}" data-pr-action="share" class="btn bg-light btn-lg">
+                <i class="bi bi-twitter" style="color: #000000;"></i>
+            </a>
+
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ object.get_sharing_url|urlencode }}" title="{% trans 'Share to Facebook' %}" data-pr-action="share" class="btn bg-light btn-lg">
+                <i class="bi bi-facebook" style="color: #0866FF;"></i>
+            </a>
+
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ object.get_sharing_url|urlencode }}" title="{% trans 'Share to Facebook' %}" data-pr-action="share" class="btn bg-light btn-lg">
+                <i class="bi bi-linkedin" style="color: #0277B5;"></i>
+            </a>
+
+            <a href="https://www.reddit.com/submit?url={{ object.get_sharing_url|urlencode }}&title={{ object.name|urlencode }}" title="{% trans 'Share to Facebook' %}" data-pr-action="share" class="btn bg-light btn-lg">
+                <i class="bi bi-reddit" style="color: #FF4500;"></i>
+            </a>
+        </div>
+    </div>
+{% endblock main %}

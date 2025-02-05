@@ -1,0 +1,30 @@
+{% load i18n thumbnail %}
+
+<div class="text-bg-dark">
+    <div class="container mb-3">
+        <div class="row align-items-center justify-content-center my-5 mb-n5">
+            <div class="col-md-8 col-lg-6">
+                <h1 class="display-2 fw-bold">{{ object.name }}</h1>
+                <div class="lead fw-normal mb-5">{{ object.description|linebreaks|truncatewords_html:72 }}</div>
+                <div class="col-lg-6 mx-auto">
+                    {% if object.moderation_tags.exists %}
+                        <div class="mb-4">
+                            {% for tag in object.moderation_tags.all %}
+                                <span class="badge text-bg-dark shadow">
+                                    <i class="bi bi-flag"></i>
+                                    {{ tag.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if object.artwork %}
+                <div class="col-md-4">
+                    <img alt="{% trans 'Podcast artwork' %}" src="{% thumbnail object.artwork '700x700' %}" loading="lazy" class="img-fluid rounded-3 shadow-lg">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

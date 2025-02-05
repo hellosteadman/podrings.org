@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{% if object.promos.exists %}
+    <h2 class="h3 text-center mb-3">
+        {% if object.promos.count > 1 %}
+            {% blocktrans with count=object.promos.count %}{{ count }} promos{% endblocktrans %}
+        {% else %}
+            {% trans 'Promo' %}
+        {% endif %}
+    </h2>
+{% endif %}
+
+{% for promo in object.promos.all %}
+    <div class="row mb-5">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            {% include 'creative/promo_card.html' with object=promo %}
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load i18n django_bootstrap5 thumbnail %}
+
+{% block modal_header %}
+    <div class="modal-header">
+        <h5 class="modal-title">{% trans 'Register your podcast with Podrings' %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+{% endblock modal_header %}
+
+{% block header %}
+    {% if request.GET.layout == 'onboarding' %}
+        <section class="bg-light py-5 my-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-xl-7 mx-auto text-center">
+                        <p class="display-4 fw-normal mb-2">{% trans 'Welcome aboard' %}</p>
+                        <h1 class="display-2 fw-bold mb-3">{% trans 'Let&rsquo;s get your first podcast setup' %}</h1>
+                        <p class="lead fw-normal mb-0">
+                            {% trans 'Search for your podcast by name,<br>and follow the instructions to register it with Podrings.' %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+{% endblock header %}
+
+{% block main %}
+    {% if not request.is_modal %}
+        {% if request.GET.layout != 'onboarding' %}<h1 class="display-4 fw-bold mb-3">{% trans 'Register your podcast with Podrings' %}</h1>{% endif %}
+
+    <div class="row">
+        <div class="{% if request.GET.layout == 'onboarding' %}col-md-8 col-lg-6 mx-auto{% else %}col-md-8{% endif %}">{% endif %}
+            <form method="post" action="{{ request.path }}">
+                {% bootstrap_field form.apple_id layout='floating' %}
+
+                <div class="alert alert-warning">
+                    {% trans 'A link will be sent to the email address listed in this podcast&rsquo;s feed, to confirm you have access to it.' %}
+                    {% trans 'Only add podcasts you own or have direct access to.' %}
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary btn-lg">{% trans 'Send confirmation link' %}</button>
+                <input name="next" type="hidden" value="{{ next|default:'' }}">
+                {% csrf_token %}
+            </form>
+        {% if not request.is_modal %}</div>
+    </div>{% endif %}
+{% endblock main %}

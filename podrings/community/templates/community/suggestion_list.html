@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n thumbnail %}
+
+{% block main %}
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="display-4 fw-bold my-0 me-3">{% trans 'Dashboard' %}</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            {% for object in object_list %}
+                <div class="mb-5">
+                    <h2 class="display-5 fw-normal">
+                        <a href="{{ object.podcast.get_absolute_url }}" class="text-dark text-decoration-none">{{ object.podcast }}</a>
+                    </h2>
+
+                    {% for promo in object.promos|slice:':5' %}
+                        {% include 'creative/promo_card.html' with object=promo show_podcast=True host=object.podcast %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock main %}
+
+{% block javascript %}
+    <div id="promos" tabindex="-1" data-bs-backdrop="static" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="my-5 mx-auto spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ block.super }}
+{% endblock javascript %}
